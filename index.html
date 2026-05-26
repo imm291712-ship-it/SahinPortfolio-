@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Minimal portfolio of MD SAHIN - aspiring software engineer. Modern glassmorphism UI.">
+    <meta name="author" content="MD SAHIN">
+    <title>MD SAHIN | minimalist dev</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0c15;
+            color: #eef2ff;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        /* subtle gradient background - minimal */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 10% 20%, rgba(59,130,246,0.08), transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* custom scroll */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111827;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4f46e5;
+            border-radius: 10px;
+        }
+
+        /* minimal loader */
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: #0a0c15;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        .loader.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader-dot {
+            width: 8px;
+            height: 8px;
+            background: #818cf8;
+            border-radius: 50%;
+            margin: 0 6px;
+            animation: pulse 1s infinite alternate;
+        }
+        .loader-dot:nth-child(2) { animation-delay: 0.2s; background: #a855f7; }
+        .loader-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes pulse {
+            0% { opacity: 0.3; transform: scale(0.8);}
+            100% { opacity: 1; transform: scale(1.2);}
+        }
+
+        /* sticky navbar - ultra clean */
+        .navbar {
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(12px);
+            background: rgba(10, 12, 21, 0.7);
+            border-bottom: 1px solid rgba(129, 140, 248, 0.2);
+            padding: 1rem 2rem;
+            z-index: 99;
+        }
+        .nav-container {
+            max-width: 1120px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-weight: 600;
+            font-size: 1.25rem;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #c7d2fe, #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover {
+            color: #a78bfa;
+        }
+        .mobile-menu {
+            display: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: #cbd5e1;
+        }
+
+        /* sections minimal spacing */
+        .section {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .section.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* glass card - lighter */
+        .glass-card {
+            background: rgba(18, 22, 40, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(129, 140, 248, 0.2);
+            padding: 1.8rem;
+            transition: border 0.2s;
+        }
+        .glass-card:hover {
+            border-color: rgba(167, 139, 250, 0.5);
+        }
+
+        /* minimal buttons */
+        .btn-neon {
+            background: linear-gradient(105deg, #4f46e5, #a855f7);
+            border: none;
+            padding: 0.6rem 1.4rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .btn-neon:hover {
+            opacity: 0.9;
+            transform: scale(0.98);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #818cf8;
+            padding: 0.55rem 1.3rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-outline:hover {
+            background: rgba(129, 140, 248, 0.1);
+            border-color: #a78bfa;
+            color: white;
+        }
+
+        /* progress bars minimal */
+        .skill-item {
+            margin-bottom: 1.2rem;
+        }
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem;
+        }
+        .progress-track {
+            height: 4px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #818cf8, #c084fc);
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+
+        /* project filters minimal */
+        .filter-bar {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .filter-chip {
+            background: transparent;
+            border: 1px solid #334155;
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .filter-chip.active, .filter-chip:hover {
+            background: rgba(129, 140, 248, 0.2);
+            border-color: #818cf8;
+            color: #e0e7ff;
+        }
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+        .project-item {
+            background: rgba(15, 19, 35, 0.6);
+            border-radius: 1.2rem;
+            padding: 1.2rem;
+            border: 1px solid rgba(129,140,248,0.15);
+        }
+
+        /* contact minimal form */
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            background: rgba(10, 12, 25, 0.7);
+            border: 1px solid #2d3a5e;
+            border-radius: 1rem;
+            padding: 0.7rem 1rem;
+            color: #f1f5f9;
+            font-family: inherit;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        .contact-form input:focus, .contact-form textarea:focus {
+            outline: none;
+            border-color: #818cf8;
+        }
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .social-icon {
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            color: #94a3b8;
+            transition: 0.2s;
+        }
+        .social-icon:hover {
+            color: #c084fc;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.75rem;
+            border-top: 1px solid rgba(129,140,248,0.1);
+            color: #5b6b8c;
+        }
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.4rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+            transition: 0.2s;
+            z-index: 98;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.05);
+        }
+        @media (max-width: 760px) {
+            .section {
+                padding: 3rem 1.25rem;
+            }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                text-align: center;
+                gap: 1rem;
+                padding: 1rem 0;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .mobile-menu {
+                display: block;
+            }
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+            .hero-minimal {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+        .hero-minimal {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .profile-img-sm {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #818cf8;
+            box-shadow: 0 0 12px rgba(129,140,248,0.3);
+        }
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            margin-bottom: 1.2rem;
+            background: linear-gradient(135deg, #e0e7ff, #c4b5fd);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .text-glow {
+            color: #cbd5e6;
+        }
+        hr {
+            margin: 1rem 0;
+            border-color: rgba(129,140,248,0.1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="loader" id="loader">
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+</div>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">MD SAHIN</div>
+        <div class="mobile-menu" id="mobileMenuBtn"><i class="fas fa-bars"></i></div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home">home</a></li>
+            <li><a href="#about">about</a></li>
+            <li><a href="#skills">skills</a></li>
+            <li><a href="#projects">work</a></li>
+            <li><a href="#contact">contact</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main>
+    <!-- Hero minimal -->
+    <section id="home" class="section">
+        <div class="glass-card" style="padding: 2rem;">
+            <div class="hero-minimal">
+                <div>
+                    <h1 style="font-size: 2.4rem; font-weight: 600; letter-spacing: -1px;">MD SAHIN</h1>
+                    <p style="font-size: 1rem; color: #a5b4fc; margin: 0.4rem 0;">Future Software Engineer · CST Student</p>
+                    <p style="font-size: 0.9rem; margin: 1rem 0; max-width: 420px;">Focused on learning modern web development and continuously improving my skills in building real-world, user-friendly, and responsive applications. I am passionate about turning ideas into functional digital solutions through consistent practice and dedication.</p>
+                    <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.2rem;">
+                        <button class="btn-neon" id="downloadCVBtn"><i class="fas fa-download"></i> CV</button>
+                        <a href="https://wa.me/qr/F67FAJWV6XXWE1" target="_blank" class="btn-outline"><i class="fab fa-whatsapp"></i> chat</a>
+                    </div>
+                </div>
+                <img src="https://res.cloudinary.com/dphhqnnoi/image/upload/f_auto,q_auto/5970_nxi1vt" alt="sahin" class="profile-img-sm" onerror="this.src='https://placehold.co/200x200/1e1b2a/white?text=MD'">
+            </div>
+            <hr>
+            <div style="display: flex; gap: 1.2rem; flex-wrap: wrap; font-size: 0.8rem;">
+                <span><i class="fas fa-map-marker-alt"></i> Barisal, Bangladesh</span>
+                <span><i class="fas fa-envelope"></i> sahongaming211@gmail.com</span>
+                <span><i class="fas fa-phone-alt"></i> +8809697110187</span>
+            </div>
+            <div style="margin-top: 1rem;">
+                <a href="https://www.facebook.com/share/1D6kr9pUPw/" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/muhammad_sahin_islam?igsh=MjRwMDRzZTNybTlr" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/qr/F67FAJWV6XXWE1" target="_blank" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About minimal -->
+    <section id="about" class="section">
+        <div class="glass-card">
+            <h2>👤 About</h2>
+          
+            <p style="font-size: 0.95rem; line-height: 1.5;">Hi, I'm Sahin — a passionate Diploma in Computer Science & Technology student. I’m deeply into programming and building modern digital tools. My goal is to become a professional software engineer, creating efficient & user-friendly software that solves real problems. Currently sharpening my web dev skills and software fundamentals. Consistency & curiosity drive me forward.</p>
+            <div style="margin-top: 1.2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                <span class="btn-outline" style="font-size:0.75rem;"><i class="fas fa-graduation-cap"></i> SSC (Science)</span>
+                <span class="btn-outline" style="font-size:0.75rem;"><i class="fas fa-laptop-code"></i> Diploma CST</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills with progress bars minimal -->
+    <section id="skills" class="section">
+        <div class="glass-card">
+            <h2>{} Tech stack</h2>
+            <div class="skill-item">
+                <div class="skill-header"><span>HTML5</span><span>30%</span></div>
+                <div class="progress-track"><div class="progress-fill" data-width="90"></div></div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-header"><span>CSS3 / Tailwind</span><span>25%</span></div>
+                <div class="progress-track"><div class="progress-fill" data-width="85"></div></div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-header"><span>JavaScript</span><span>10%</span></div>
+                <div class="progress-track"><div class="progress-fill" data-width="70"></div></div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-header"><span>React.js</span><span>10%</span></div>
+                <div class="progress-track"><div class="progress-fill" data-width="60"></div></div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-header"><span>Python / C++</span><span>55%</span></div>
+                <div class="progress-track"><div class="progress-fill" data-width="55"></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- projects filtered minimal -->
+    <section id="projects" class="section">
+        <div class="glass-card">
+            <h2>🛠 Projects</h2>
+            <div class="filter-bar">
+                <button class="filter-chip active" data-filter="all">all</button>
+                <button class="filter-chip" data-filter="web">web</button>
+                <button class="filter-chip" data-filter="ui">ui/ux</button>
+                <button class="filter-chip" data-filter="app">app</button>
+            </div>
+            <div class="projects-grid" id="projectsContainer">
+                <div class="project-item" data-category="web">
+                    <h3 style="font-weight: 500;">Glassfolio</h3>
+                    <p style="font-size:0.8rem; margin:6px 0;">Minimal glassmorphism portfolio, smooth ui.</p>
+                    <div style="display: flex; gap: 8px; margin-top: 10px;">
+                        <span class="btn-outline" style="padding:0.2rem 0.8rem; font-size:0.7rem;">github</span>
+                        <span class="btn-outline" style="padding:0.2rem 0.8rem; font-size:0.7rem;">live</span>
+                    </div>
+                </div>
+                <div class="project-item" data-category="web">
+                    <h3 style="font-weight: 500;">Taskmate</h3>
+                    <p style="font-size:0.8rem;">Productivity app with localstorage & clean ui.</p>
+                    <div style="display: flex; gap: 8px; margin-top: 10px;"><span class="btn-outline" style="padding:0.2rem 0.8rem;">demo</span></div>
+                </div>
+                <div class="project-item" data-category="ui">
+                    <h3 style="font-weight: 500;">Nebula {}UI</h3>
+                    <p style="font-size:0.8rem;">Modern dashboard concept, glassmorphism.</p>
+                    <div style="display: flex; gap: 8px; margin-top: 10px;"><span class="btn-outline" style="padding:0.2rem 0.8rem;">figma</span></div>
+                </div>
+                <div class="project-item" data-category="app">
+                    <h3 style="font-weight: 500;">Weather pulse</h3>
+                    <p style="font-size:0.8rem;">eal-time weather pwa using api.</p>
+                    <div style="display: flex; gap: 8px; margin-top: 10px;"><span class="btn-outline" style="padding:0.2rem 0.8rem;">source</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services minimal -->
+    <section id="services" class="section">
+        <div class="glass-card">
+            <h2>🎁 Offerings</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 2rem; margin-top: 0.5rem;">
+                <div><i class="fas fa-palette" style="color:#a78bfa;"></i> <strong style="font-weight:500;">web design</strong><br><span style="font-size:0.8rem;">responsive & modern</span></div>
+                <div><i class="fas fa-laptop-code" style="color:#818cf8;"></i> <strong>frontend dev</strong><br><span style="font-size:0.8rem;">html/css/react</span></div>
+                <div><i class="fas fa-drafting-compass" style="color:#c084fc;"></i> <strong>ui/ux design</strong><br><span style="font-size:0.8rem;">prototypes</span></div>
+                <div><i class="fas fa-bezier-curve" style="color:#a5b4fc;"></i> <strong>logo design</strong><br><span style="font-size:0.8rem;">brand identity</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials optional minimal -->
+    <section id="testimonials" class="section">
+        <div class="glass-card">
+            <h2>🤝 Feedback</h2>
+            <div style="font-size:0.85rem; font-style:italic;">“Sahin's frontend work is clean and modern — great attention to detail.” — Rakib ⭐⭐⭐⭐</div>
+            <div style="margin-top:0.8rem; font-size:0.85rem; font-style:italic;">“Passionate and quick learner, delivers quality.” — Nusrat ⭐⭐⭐⭐</div>
+        </div>
+    </section>
+
+    <!-- Contact minimal -->
+    <section id="contact" class="section">
+        <div class="glass-card">
+            <h2>🔗 Connect</h2>
+            <div class="two-col">
+                <div>
+                    <p><i class="fas fa-map-pin"></i> Barisal, Bangladesh</p>
+                    <p><i class="fas fa-paper-plane"></i> sahongaming211@gmail.com</p>
+                    <p><i class="fas fa-phone-alt"></i> +8809697110187</p>
+                    <button id="whatsappBtnDirect" class="btn-neon" style="margin-top: 1rem; width: auto;"><i class="fab fa-whatsapp"></i> whatsapp</button>
+                </div>
+                <form id="contactForm" class="contact-form">
+                    <input type="text" placeholder="name" id="cname" required>
+                    <input type="email" placeholder="email" id="cemail" required>
+                    <textarea rows="2" placeholder="message" id="cmsg" required></textarea>
+                    <button type="submit" class="btn-neon" style="width:100%">send →</button>
+                    <p id="formStatus" style="font-size:0.75rem; margin-top: 0.5rem;"></p>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>© 2025 MD SAHIN — All rights reserved</p>
+</footer>
+
+<a href="https://wa.me/qr/F67FAJWV6XXWE1" target="_blank" class="whatsapp-float"><i class="fab fa-whatsapp"></i></a>
+
+<script>
+    // loader
+    window.addEventListener('load', () => {
+        const loader = document.getElementById('loader');
+        loader.classList.add('hide');
+        setTimeout(() => loader.style.display = 'none', 500);
+        animateProgress();
+        revealSections();
+        initFilters();
+    });
+
+    function animateProgress() {
+        const fills = document.querySelectorAll('.progress-fill');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    const width = e.target.getAttribute('data-width');
+                    e.target.style.width = width + '%';
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.3 });
+        fills.forEach(f => observer.observe(f));
+    }
+
+    function revealSections() {
+        const sections = document.querySelectorAll('.section');
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('revealed');
+            });
+        }, { threshold: 0.1 });
+        sections.forEach(s => obs.observe(s));
+        sections.forEach(s => { if (s.getBoundingClientRect().top < window.innerHeight-80) s.classList.add('revealed'); });
+    }
+
+    // project filter
+    function initFilters() {
+        const filterBtns = document.querySelectorAll('.filter-chip');
+        const projects = document.querySelectorAll('.project-item');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.getAttribute('data-filter');
+                projects.forEach(p => {
+                    const cat = p.getAttribute('data-category');
+                    if (filter === 'all' || cat === filter) p.style.display = 'block';
+                    else p.style.display = 'none';
+                });
+            });
+        });
+    }
+
+    // mobile toggle
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const navUl = document.getElementById('navLinks');
+    mobileBtn.addEventListener('click', () => navUl.classList.toggle('active'));
+    document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navUl.classList.remove('active')));
+
+    // download cv
+    document.getElementById('downloadCVBtn').addEventListener('click', () => {
+        const cv = `MD SAHIN\nAspiring Software Engineer\nEducation: SSC(Science), Diploma CST\nSkills: HTML, CSS, JS, React\nLocation: Barisal, Bangladesh\nEmail: sahongaming211@gmail.com\nPhone: +8809697110187\nPassionate about building software solutions.`;
+        const blob = new Blob([cv], {type: 'text/plain'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'md_sahin_cv.txt';
+        a.click();
+        URL.revokeObjectURL(a.href);
+    });
+
+    // contact form
+    const form = document.getElementById('contactForm');
+    const statusP = document.getElementById('formStatus');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('cname').value.trim();
+        const email = document.getElementById('cemail').value.trim();
+        const msg = document.getElementById('cmsg').value.trim();
+        if (name && email && msg) {
+            statusP.innerHTML = '<span style="color:#a5f3c3;">✓ message sent (demo). thanks!</span>';
+            form.reset();
+            setTimeout(() => statusP.innerHTML = '', 2500);
+        } else {
+            statusP.innerHTML = '<span style="color:#f9a8d4;">fill all fields.</span>';
+        }
+    });
+
+    const whatsappDir = document.getElementById('whatsappBtnDirect');
+    if(whatsappDir) whatsappDir.addEventListener('click', () => window.open('https://wa.me/qr/F67FAJWV6XXWE1', '_blank'));
+
+    // smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = this.getAttribute('href').substring(1);
+            if(target) {
+                const el = document.getElementById(target);
+                if(el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+</script>
+</body>
+</html>
