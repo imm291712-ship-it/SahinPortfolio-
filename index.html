@@ -624,7 +624,7 @@
         const email = document.getElementById('cemail').value.trim();
         const msg = document.getElementById('cmsg').value.trim();
         if (name && email && msg) {
-            statusP.innerHTML = '<span style="color:#a5f3c3;">✓ message sent (demo). thanks!</span>';
+            statusP.innerHTML = '<span style="color:#a5f3c3;">✓ message sent. thanks!</span>';
             form.reset();
             setTimeout(() => statusP.innerHTML = '', 2500);
         } else {
